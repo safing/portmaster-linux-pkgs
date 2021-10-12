@@ -41,7 +41,8 @@ jobs:
         with:
           name: portmaster.deb
 
-      - run: ls -laR
+      - name: Install dependencies
+        run: sudo bash -c "apt-get update && apt-get install -y libnetfilter-queue1"
 
       - name: Install deb package
         run: yes | sudo dpkg -i ./portmaster_*.deb
