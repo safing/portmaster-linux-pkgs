@@ -79,6 +79,7 @@ jobs:
       - name: Install deb package
         run: yes | sudo dpkg -i ./portmaster_*.deb
 
+      - uses: actions/checkout@v2
       - name: Verify installation
         run: sudo ./hacks/test-install.sh
 
@@ -109,5 +110,6 @@ jobs:
       - name: Install package
         run: yum localinstall -y ./portmaster-*.rpm
 
+      - uses: actions/checkout@v2
       - name: Verify installation
         run: ./hacks/test-install.sh
