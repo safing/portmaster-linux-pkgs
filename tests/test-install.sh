@@ -16,7 +16,7 @@ group "Systemd Integration"
         if ! systemctl cat portmaster.service 2>/dev/null >&2 ; then
             error "portmaster.service not found"
         else
-            info "portmaster.service found by systemd"
+            debug "portmaster.service found by systemd"
         fi
     else
         debug "Skipping systemctl checks ..."
@@ -31,7 +31,7 @@ group "Systemd Integration"
         if ! systemd-analyze verify portmaster.service ; then
             error "systemd-analyze returned an error for portmaster.service"
         else
-            info "systemd-analyze check successful"
+            debug "systemd-analyze check successful"
         fi
     else
         debug "Skipping systemd-analyze checks ..."
@@ -43,14 +43,14 @@ group "Desktop file"
     if ! desktop-file-validate /usr/share/applications/portmaster.desktop ; then
         error "portmaster.desktop seems invalid"
     else
-        info "portmaster.desktop seems valid"
+        debug "portmaster.desktop seems valid"
     fi
 
     debug "Testing portmaster_notifier.desktop"
     if ! desktop-file-validate /usr/share/applications/portmaster_notifier.desktop ; then
         error "portmaster_notifier.desktop seems invalid"
     else
-        info "portmaster_notifier.desktop seems valid"
+        debug "portmaster_notifier.desktop seems valid"
     fi
 endgroup
 
@@ -58,7 +58,7 @@ group "Modules"
     if ! [ -e /opt/portmaster/updates/stable.json ]; then
         error "Expected stable.json to have been downloaded"
     else
-        info "stable.json correctly downloaded from update server"
+        debug "stable.json correctly downloaded from update server"
     fi
 endgroup
 
