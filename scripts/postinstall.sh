@@ -1,8 +1,12 @@
 #!/bin/sh
 
-set -e
+log() {
+    printf "\033[33;1mportmaster:\033[0m $@\n"
+}
 
-echo "\033[33;1mportmaster:\033[0m Post-Install: $@"
+set -eu
+
+log "Post-Install: $@"
 
 #
 # Prepare and gather some facts about the system we're installing on
@@ -12,30 +16,40 @@ systemd_version=0
 if ! command -V systemctl >/dev/null 2>&1; then
   use_systemctl="False"
 else
-    systemd_version=$(systemctl --version | head -1 | sed 's/systemd //g')
+    systemd_version="$(systemctl --version | head -1 | sed 's/systemd //g')"
 fi
 has_desktop_file_install="False"
 if command -V desktop-file-install >/dev/null 2>&1; then
     has_desktop_file_install="True"
 fi
-download_agent=${PMSTART_UPDATE_AGENT:=Start}
-skip_downloads=${PMSTART_SKIP_DOWNLOAD:=False}
+download_agent="${PMSTART_UPDATE_AGENT:=Start}"
+skip_downloads="${PMSTART_SKIP_DOWNLOAD:=False}"
+
+# TODO(ppacher): update selinux context for portmaster-start
+use_selinux="True"
+if ! command -V getenforce >/dev/null 2>&1; then
+    use_selinux="False"
+fi
 
 . /etc/os-release
 
 matches() {
-    input="$1"
-    pattern="$2"
+    local input="$1"
+    local pattern="$2"
     echo "$input" | grep -q "$pattern"
 }
 
 download_modules() {
     if [ "${skip_downloads}" = "True" ]; then
-        echo "\033[33;1mportmaster:\033[0m Downloading of Portmaster modules skipped!"
-        echo "\033[33;1mportmaster:\033[0m  Please run '/opt/portmaster/bin/portmaster-start --data /opt/portmaster update' manually.\n"
+        log "Downloading of Portmaster modules skipped!"
+        log "Please run '/opt/portmaster/portmaster-start --data /opt/portmaster update' manually.\n"
         return
     fi
-    /opt/portmaster/bin/portmaster-start --data /opt/portmaster update --update-agent ${download_agent}
+    log "Downloading portmaster modules. This may take a while ..."
+    /opt/portmaster/portmaster-start --data /opt/portmaster update --update-agent ${download_agent} 2>/dev/null >/dev/null || (
+        log "Failed to download modules"
+        log "Please run '/opt/portmaster/portmaster-start --data /opt/portmaster update' manually.\n"
+    )
 }
 
 cleanInstall() {
@@ -43,7 +57,7 @@ cleanInstall() {
     # install .desktop files, either using desktop-file-install when available
     # or by just copying the files into /usr/share/applications.
     #
-    if [ $has_desktop_file_install = "True" ]; then
+    if [ "${has_desktop_file_install}" = "True" ]; then
         desktop-file-install /opt/portmaster/portmaster.desktop ||:
         desktop-file-install /opt/portmaster/portmaster_notifier.desktop ||:
     elif [ -d /usr/share/applications ]; then
@@ -54,11 +68,22 @@ cleanInstall() {
     #
     # Add a symlink for the portmaster service unit in case we need it.
     #
-    if [ $use_systemctl = "True" ]; then
+    if [ "${use_systemctl}" = "True" ]; then
         # not all distros have migrated /lib to /usr/lib yet but all that
         # have provide a symlink from /lib -> /usr/lib so we just prefix with
         # /lib here.
-        ln -s /lib/systemd/system/portmaster.service /opt/portmaster/portmaster.service
+        ln -s /opt/portmaster/portmaster.service /lib/systemd/system/portmaster.service 
+
+        # enable the portmaster service to launch at boot
+        log "Configuring portmaster.service to launch at boot"
+        systemctl enable portmaster.service
+    fi
+
+    #
+    # Fix selinux permissions for portmaster-start
+    #
+    if [ "${use_selinux}" = "True" ]; then
+        chcon -t bin_t /opt/portmaster/portmaster-start
     fi
 
     #
@@ -68,10 +93,17 @@ cleanInstall() {
     download_modules
 }
 
+#
+# This is executed in the post-install of an upgrade operation.
+#
 upgrade() {
     #
-    # This is executed in the post-install of an upgrade operation.
+    # As of 0.4.0 portmaster-control has been renamed to portmaster-start
+    # and is not placed in /usr/bin anymore. Unfortunately, the postrm script
+    # of the old installer does not get rid of portmaster-control so we should
+    # take care during an upgrade.
     #
+    rm /usr/bin/portmaster-control 2>/dev/null >&2 ||:
 
     #
     # If there's already a /var/lib/portmaster installation we're going to move
@@ -81,12 +113,12 @@ upgrade() {
     #
     if [ -d /var/lib/portmaster ]; then
         if [ ! -d /opt/portmaster/config.json ]; then
-            echo "\033[33;1mportmaster:\033[0m Migrating from previous installation at /var/lib/portmaster to /opt/portmaster ..."
+            log "Migrating from previous installation at /var/lib/portmaster to /opt/portmaster ..."
             mv /var/lib/portmaster/databases /opt/portmaster/databases ||:
             mv /var/lib/portmaster/config.json /opt/portmaster/config.json ||:
         fi
-        echo "\033[33;1mportmaster:\033[0m Removing previous installation directory at /var/lib/portmaster"
-        rm -r /var/lib/portmaster ||:
+        log "Removing previous installation directory at /var/lib/portmaster"
+        rm -r /var/lib/portmaster 2>/dev/null >&2 ||:
     fi
 }
 
