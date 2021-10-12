@@ -56,7 +56,13 @@ jobs:
 
       - uses: actions/checkout@v2
       - name: Verify installation
-        run: ./hacks/test-install.sh
+        run: ./tests/test-install.sh
+
+      - name: Uninstall portmaster
+        run: sudo apt-get remove -y portmaster
+
+      - name: Verify uninstallation
+        run: ./tests/test-uninstall.sh
 
   test-deb:
     name: Test DEB package
@@ -95,7 +101,7 @@ jobs:
 
       - uses: actions/checkout@v2
       - name: Verify installation
-        run: sudo ./hacks/test-install.sh
+        run: sudo ./tests/test-install.sh
 
   test-rpm:
     name: Test RPM package
@@ -126,4 +132,10 @@ jobs:
 
       - uses: actions/checkout@v2
       - name: Verify installation
-        run: ./hacks/test-install.sh
+        run: ./tests/test-install.sh
+
+      - name: Uninstall portmaster
+        run: sudo yum remove -y portmaster
+
+      - name: Verify uninstallation
+        run: ./tests/test-uninstall.sh
