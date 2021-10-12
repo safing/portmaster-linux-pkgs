@@ -29,6 +29,8 @@ jobs:
 
       - name: Build with next pkgrev
         run: make clean && make increase-pkgrev && make all
+        env:
+          NFPM: ./bin/nfpm
 
       - name: Upload .deb
         uses: actions/upload-artifact@v2
