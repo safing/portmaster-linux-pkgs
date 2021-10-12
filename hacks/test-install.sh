@@ -33,6 +33,7 @@ endgroup() {
 systemd_running="False"
 
 if [ "$(pgrep systemd | head -n1)" = "1" ]; then
+    debug "Found systemd running at $(pgrep systemd | head -1)"
     systemd_running="True"
 fi
 
