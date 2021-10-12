@@ -52,11 +52,13 @@ download_modules() {
     )
 }
 
+#
+# Prepares systemd support by creating a symlink for the .service file
+# and enabling/disabling certain features of our .service unit based on
+# the available systemd version. 
+#
 installSystemdSupport() {
     local changed="False"
-    #
-    # Add a symlink for the portmaster service unit in case we need it.
-    #
     if [ "${use_systemctl}" = "True" ]; then
         # not all distros have migrated /lib to /usr/lib yet but all that
         # have provide a symlink from /lib -> /usr/lib so we just prefix with
