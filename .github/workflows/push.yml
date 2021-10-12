@@ -47,11 +47,6 @@ jobs:
         with:
           name: portmaster-current
 
-      - uses: actions/download-artifact@v2
-        with:
-          name: portmaster-next
-          path: ./next
-
       - name: Install tooling
         run: sudo bash -c "apt-get update && apt-get install -y systemd desktop-file-utils"
         env:
@@ -69,8 +64,13 @@ jobs:
       - name: Verify installation
         run: ./tests/test-install.sh
 
+      - uses: actions/download-artifact@v2
+        with:
+          name: portmaster-next
+          path: ./next
+
       - name: "Upgrade to next pkgrev"
-        run: yes | sudo dpkg -i ./next/portmaster_*.deb
+        run: yes | sudo dpkg -i ./next/portmaster_*.deb || ls -R
 
       - name: Verify upgrade
         run: ./tests/test-upgrade.sh
@@ -103,11 +103,6 @@ jobs:
         with:
           name: portmaster-current
 
-      - uses: actions/download-artifact@v2
-        with:
-          name: portmaster-next
-          path: ./next
-
       - name: Install tooling
         run: sudo bash -c "apt-get update && apt-get install -y systemd desktop-file-utils"
         env:
@@ -124,6 +119,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Verify installation
         run: sudo ./tests/test-install.sh
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: portmaster-next
+          path: ./next
 
       - name: "Upgrade to next pkgrev"
         run: yes | sudo dpkg -i ./next/portmaster_*.deb
@@ -155,11 +155,6 @@ jobs:
         with:
           name: portmaster-current
 
-      - uses: actions/download-artifact@v2
-        with:
-          name: portmaster-next
-          path: ./next
-
       - name: Install tooling
         run: yum install -y systemd desktop-file-utils
 
@@ -172,6 +167,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Verify installation
         run: ./tests/test-install.sh
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: portmaster-next
+          path: ./next
 
       - name: "Upgrade to next pkgrev"
         run: yum localinstall -y ./next/portmaster-*.rpm
