@@ -41,12 +41,20 @@ jobs:
         with:
           name: portmaster.deb
 
+      - name: Install tooling
+        run: sudo bash -c "apt-get update && apt-get install -y systemd desktop-file-utils"
+        env:
+          DEBIAN_FRONTEND: noninteractive
+
       - name: Install dependencies
-        run: sudo bash -c "apt-get update && apt-get install -y libnetfilter-queue1"
+        run: sudo apt-get install -y libnetfilter-queue1 ca-certificates
+        env:
+          DEBIAN_FRONTEND: noninteractive
 
       - name: Install deb package
         run: yes | sudo dpkg -i ./portmaster_*.deb
 
+      - uses: actions/checkout@v2
       - name: Verify installation
         run: ./hacks/test-install.sh
 
@@ -64,6 +72,8 @@ jobs:
           - debian:unstable
           - debian:oldstable
           - debian:testing
+          - linuxmintd/mint20-amd64
+          - linuxmintd/mint19-amd64
     needs: build
     steps:
       - uses: actions/download-artifact@v2
@@ -71,10 +81,14 @@ jobs:
           name: portmaster.deb
 
       - name: Install tooling
-        run: sudo bash -c "apt-get update && apt-get install -y systemd"
+        run: sudo bash -c "apt-get update && apt-get install -y systemd desktop-file-utils"
+        env:
+          DEBIAN_FRONTEND: noninteractive
 
       - name: Install dependencies
-        run: sudo bash -c "apt-get install -y libnetfilter-queue1"
+        run: sudo apt-get install -y libnetfilter-queue1 ca-certificates
+        env:
+          DEBIAN_FRONTEND: noninteractive
 
       - name: Install deb package
         run: yes | sudo dpkg -i ./portmaster_*.deb
@@ -102,7 +116,7 @@ jobs:
           name: portmaster.rpm
 
       - name: Install tooling
-        run: yum install -y systemd
+        run: yum install -y systemd desktop-file-utils
 
       # we use yum localinstall instead of dnf install because
       # not all tested distro versions have dnf available and dnf

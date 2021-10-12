@@ -45,6 +45,6 @@ case "$action" in
     # $1 == version being installed  
     log "post remove of alpine"
     log "Alpine linux is not yet supported"
-    exit 1
+    #exit 1
     ;;
 esac

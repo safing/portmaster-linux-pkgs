@@ -13,7 +13,7 @@ systemd_version=0
 if ! command -V systemctl >/dev/null 2>&1; then
   use_systemctl="False"
 else
-    systemd_version=$(systemctl --version | head -1 | sed 's/systemd //g')
+    systemd_version=$(systemctl --version | head -1 | sed -n 's/systemd \([0-9]*\).*/\1/p') 
 fi
 
 preremove() {

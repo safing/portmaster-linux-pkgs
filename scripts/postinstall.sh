@@ -16,7 +16,7 @@ systemd_version=0
 if ! command -V systemctl >/dev/null 2>&1; then
   use_systemctl="False"
 else
-    systemd_version="$(systemctl --version | head -1 | sed 's/systemd //g')"
+    systemd_version="$(systemctl --version | head -1 | sed -n 's/systemd \([0-9]*\).*/\1/p')"
 fi
 has_desktop_file_install="False"
 if command -V desktop-file-install >/dev/null 2>&1; then
@@ -52,6 +52,39 @@ download_modules() {
     )
 }
 
+installSystemdSupport() {
+    local changed="False"
+    #
+    # Add a symlink for the portmaster service unit in case we need it.
+    #
+    if [ "${use_systemctl}" = "True" ]; then
+        # not all distros have migrated /lib to /usr/lib yet but all that
+        # have provide a symlink from /lib -> /usr/lib so we just prefix with
+        # /lib here.
+        ln -s /opt/portmaster/portmaster.service /lib/systemd/system/portmaster.service 2>/dev/null >&2 ||:
+
+        # rhel/centos8 does not yet have ProtectKernelLogs available
+        if [ "${systemd_version}" -lt 244 ]; then
+            sed -i "s/^ProtectKernelLogs/#ProtectKernelLogs/g" /opt/portmaster/portmaster.service ||:
+            changed="True"
+        fi
+
+        # SystemCallFilter groups are added in 231 so make sure we comment it out
+        if [ "${systemd_version}" -lt 231 ]; then
+            sed -i "s/^SystemCall/#SystemCall/g" /opt/portmaster/portmaster.service ||:
+            changed="True"
+        fi
+
+        if [ "${changed}" = "True" ] && [ "$1" = "upgrade" ]; then
+            systemctl daemon-reload ||:
+        fi
+
+        # enable the portmaster service to launch at boot
+        log "Configuring portmaster.service to launch at boot"
+        systemctl enable portmaster.service ||:
+    fi
+}
+
 cleanInstall() {
     #
     # install .desktop files, either using desktop-file-install when available
@@ -65,19 +98,7 @@ cleanInstall() {
         cp /opt/portmaster/portmaster_notifier.desktop /usr/share/applications 2>/dev/null ||:
     fi
 
-    #
-    # Add a symlink for the portmaster service unit in case we need it.
-    #
-    if [ "${use_systemctl}" = "True" ]; then
-        # not all distros have migrated /lib to /usr/lib yet but all that
-        # have provide a symlink from /lib -> /usr/lib so we just prefix with
-        # /lib here.
-        ln -s /opt/portmaster/portmaster.service /lib/systemd/system/portmaster.service 
-
-        # enable the portmaster service to launch at boot
-        log "Configuring portmaster.service to launch at boot"
-        systemctl enable portmaster.service
-    fi
+    installSystemdSupport "install"
 
     #
     # Fix selinux permissions for portmaster-start
@@ -120,6 +141,8 @@ upgrade() {
         log "Removing previous installation directory at /var/lib/portmaster"
         rm -r /var/lib/portmaster 2>/dev/null >&2 ||:
     fi
+
+    installSystemdSupport "upgrade"
 }
 
 # Step 2, check if this is a clean install or an upgrade
