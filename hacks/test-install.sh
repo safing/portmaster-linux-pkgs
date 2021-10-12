@@ -8,6 +8,9 @@ error_count=0
 debug() {
     printf "::debug::%s\n" "$@"
 }
+info() {
+    printf "::notice::%s\n" "$@"
+}
 error() {
     ((error_count++))
     printf "::error::%s\n" "$@"
@@ -45,7 +48,11 @@ group "Systemd Integration"
         debug "Test if portmaster.service can be reached"
         if ! systemctl cat portmaster.service 2>/dev/null >&2 ; then
             error "portmaster.service not found"
+        else
+            info "portmaster.service found by systemd"
         fi
+    else
+        debug "Skipping systemctl checks ..."
     fi
 
     #
@@ -56,19 +63,27 @@ group "Systemd Integration"
         debug "Use systemd-analyze to verify portmaster.service"
         if ! systemd-analyze verify portmaster.service ; then
             error "systemd-analyze returned an error for portmaster.service"
+        else
+            info "systemd-analyze check successful"
         fi
+    else
+        debug "Skipping systemd-analyze checks ..."
     fi
 endgroup
 
 group "Desktop file"
     debug "Testing portmaster.desktop"
-    if ! desktop-file-validate portmaster.desktop ; then
+    if ! desktop-file-validate /usr/share/applications/portmaster.desktop ; then
         error "portmaster.desktop seems invalid"
+    else
+        info "portmaster.desktop seems valid"
     fi
 
     debug "Testing portmaster_notifier.desktop"
-    if ! desktop-file-validate portmaster_notifier.desktop ; then
+    if ! desktop-file-validate /usr/share/applications/portmaster_notifier.desktop ; then
         error "portmaster_notifier.desktop seems invalid"
+    else
+        info "portmaster_notifier.desktop seems valid"
     fi
 endgroup
 
