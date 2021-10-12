@@ -1,7 +1,7 @@
 #!/bin/sh
 
 log() {
-    printf "\033[33;1mportmaster:\033[0m $@\n"
+    printf "\033[33;1mportmaster:\033[0m %s\n" "$@"
 }
 
 set -eu
@@ -19,5 +19,3 @@ checkConflicts() {
 }
 
 checkConflicts
-
-case "$1" 

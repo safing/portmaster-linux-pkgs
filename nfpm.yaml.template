@@ -93,7 +93,7 @@ rpm:
 
 deb:
   scripts:
-    rules: ./scripts/rules.sh
+    rules: ./scripts/rules
   triggers:
     activate:
       - update-icon-caches
