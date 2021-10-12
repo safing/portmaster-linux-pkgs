@@ -32,7 +32,7 @@ jobs:
           name: portmaster.rpm
           path: dist/portmaster-*.rpm
 
-  test-deb:
+  test-ubuntu:
     name: Test DEB package (ubuntu VM)
     runs-on: ubuntu-latest
     needs: build
@@ -46,6 +46,41 @@ jobs:
 
       - name: Install deb package
         run: yes | sudo dpkg -i ./portmaster_*.deb
+
+      - name: Verify installation
+        run: ./hacks/test-install.sh
+
+  test-deb:
+    name: Test DEB package
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        container:
+          - hugojosefson/popos
+          - ubuntu:latest
+          - ubuntu:rolling
+          - ubuntu:xenial
+          - debian:stable
+          - debian:unstable
+          - debian:oldstable
+          - debian:testing
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: portmaster.deb
+
+      - name: Install tooling
+        run: apt-get update && apt-get instyll -y systemd
+
+      - name: Install dependencies
+        run: apt-get update && apt-get install -y libnetfilter-queue1
+
+      - name: Install deb package
+        run: yes | sudo dpkg -i ./portmaster_*.deb
+
+      - name: Verify installation
+        run: ./hacks/test-install.sh
 
   test-rpm:
     name: Test RPM package
@@ -64,8 +99,15 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: portmaster.rpm
+
+      - name: Install tooling
+        run: yum install systemd
+
       # we use yum localinstall instead of dnf install because
       # not all tested distro versions have dnf available and dnf
       # supports being aliased as yum
       - name: Install package
         run: yum localinstall -y ./portmaster-*.rpm
+
+      - name: Verify installation
+        run: ./hacks/test-install.sh
