@@ -71,7 +71,7 @@ jobs:
           name: portmaster.deb
 
       - name: Install tooling
-        run: sudo bash -c "apt-get update && apt-get instyll -y systemd"
+        run: sudo bash -c "apt-get update && apt-get install -y systemd"
 
       - name: Install dependencies
         run: sudo bash -c "apt-get install -y libnetfilter-queue1"
