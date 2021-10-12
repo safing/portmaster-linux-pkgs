@@ -68,4 +68,4 @@ jobs:
       # not all tested distro versions have dnf available and dnf
       # supports being aliased as yum
       - name: Install package
-        run: yes | yum localinstall ./portmaster-*.rpm
+        run: yum localinstall -y ./portmaster-*.rpm
