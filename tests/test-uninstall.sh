@@ -1,6 +1,7 @@
 #!/bin/bash
 
-. ./common.sh
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. ${SCRIPT_DIR}/common.sh
 
 group "Ensure portmaster is not running"
     if is_systemd_running; then

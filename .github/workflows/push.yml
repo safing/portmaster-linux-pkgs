@@ -21,7 +21,7 @@ jobs:
         run: make all
         env:
           NFPM: ./bin/nfpm
-      - name: Upload .deb
+      - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: portmaster-current
@@ -32,7 +32,7 @@ jobs:
         env:
           NFPM: ./bin/nfpm
 
-      - name: Upload .deb
+      - name: Upload artifacts with next pkgrev
         uses: actions/upload-artifact@v2
         with:
           name: portmaster-next

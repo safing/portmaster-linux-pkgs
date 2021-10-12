@@ -1,6 +1,7 @@
 #!/bin/bash
 
-. ./common.sh
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. ${SCRIPT_DIR}/common.sh
 
 #
 # Perform our tests
@@ -50,6 +51,14 @@ group "Desktop file"
         error "portmaster_notifier.desktop seems invalid"
     else
         info "portmaster_notifier.desktop seems valid"
+    fi
+endgroup
+
+group "Modules"
+    if ! [ -e /opt/portmaster/updates/stable.json ]; then
+        error "Expected stable.json to have been downloaded"
+    else
+        info "stable.json correctly downloaded from update server"
     fi
 endgroup
 
