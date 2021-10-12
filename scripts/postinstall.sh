@@ -6,7 +6,7 @@ log() {
 
 set -eu
 
-log "Post-Install: $@"
+log "post-install:" "$@"
 
 #
 # Prepare and gather some facts about the system we're installing on

@@ -6,7 +6,7 @@ log() {
 
 set -e
 
-log "Post-Remove: $@"
+log "post-remove:" "$@"
 
 cleanup() {
     rm -rf /opt/portmaster/updates

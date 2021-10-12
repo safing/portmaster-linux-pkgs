@@ -6,7 +6,7 @@ log() {
 
 set -eu
 
-log "Pre-Install: $@"
+log "pre-install:" "$@"
 
 checkConflicts() {
     if [ -d /var/lib/portmaster/updates ]; then

@@ -6,7 +6,7 @@ log() {
 
 set -eu
 
-log "Pre-Remove: $@"
+log "pre-remove:" "$@"
 
 use_systemctl="True"
 systemd_version=0
