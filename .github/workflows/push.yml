@@ -44,11 +44,12 @@ jobs:
       - run: ls -laR
 
       - name: Install deb package
-        run: yes | sudo dpkg -i ./portmaster.deb
+        run: yes | sudo dpkg -i ./portmaster_*.deb
 
   test-rpm:
     name: Test RPM package
     runs-on: ubuntu-latest
+    needs: build
     strategy:
       matrix:
         container:
@@ -68,4 +69,4 @@ jobs:
       # not all tested distro versions have dnf available and dnf
       # supports being aliased as yum
       - name: Install package
-        run: yes | yum localinstall ./portmaster.rpm
+        run: yes | yum localinstall ./portmaster-*.rpm
