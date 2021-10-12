@@ -10,7 +10,7 @@ group "Systemd Integration"
     # the following tests only work if the system is booted using
     # systemd 
     #
-    if [ "${systemd_running}" = "True" ]; then
+    if is_systemd_running then
         debug "Test if portmaster.service can be reached"
         if ! systemctl cat portmaster.service 2>/dev/null >&2 ; then
             error "portmaster.service not found"
@@ -25,7 +25,7 @@ group "Systemd Integration"
     # The following tests should work without the daemon running except
     # on Mint19 ...
     #
-    if ! [ "${VERSION}" = "19 (Tara)" ] || [ "${systemd_running}" = "True" ] ; then # Skip systemd tests on Mint19 ...
+    if ! [ "${VERSION}" = "19 (Tara)" ] || is_systemd_running ; then # Skip systemd tests on Mint19 ...
         debug "Use systemd-analyze to verify portmaster.service"
         if ! systemd-analyze verify portmaster.service ; then
             error "systemd-analyze returned an error for portmaster.service"

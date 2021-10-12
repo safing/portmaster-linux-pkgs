@@ -3,7 +3,7 @@
 . ./common.sh
 
 group "Ensure portmaster is not running"
-    if [ "${systemd_running}" = "True" ]; then
+    if is_systemd_running; then
         if systemctl is-active portmaster.service ; then
             error "portmaster.service should have been stopped on uninstall"
         fi

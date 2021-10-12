@@ -31,11 +31,22 @@ endgroup() {
 #
 . /etc/os-release
 
-systemd_running="False"
+systemd_running=""
 
-if [ "$(pgrep systemd | head -n1)" = "1" ]; then
-    debug "Found systemd running at $(pgrep systemd | head -1)"
-    systemd_running="True"
-fi
+# is_systemd_running lazily detects if systemd is running in the current
+# environment.
+is_systemd_running() {
+    if [ "${systemd_running}" = "" ]; then
+        systemd_running="False"
+        if [ "$(pgrep systemd | head -n1)" = "1" ]; then
+            debug "Found systemd running at $(pgrep systemd | head -1)"
+            systemd_running="True"
+        fi
+    fi
 
-export systemd_running
+    if [ "${systemd_running}" = "True" ]; then
+        return 0
+    fi
+
+    return 1
+}

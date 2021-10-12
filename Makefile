@@ -39,5 +39,8 @@ test-debian: build deb
 test-ubuntu: build deb
 	docker run -ti --rm -v $(shell pwd)/dist:/work -w /work ubuntu:latest bash -c 'apt update && apt install -y ca-certificates && dpkg -i /work/portmaster*.deb ; bash'
 
+increase-pkgrev:
+	bash -c 'rev=$$(cat pkgrev) ; ((rev++)) ; echo $${rev} > ./pkgrev'
+
 lint:
 	shellcheck 
