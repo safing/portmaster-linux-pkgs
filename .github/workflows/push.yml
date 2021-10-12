@@ -71,16 +71,16 @@ jobs:
           name: portmaster.deb
 
       - name: Install tooling
-        run: apt-get update && apt-get instyll -y systemd
+        run: sudo bash -c "apt-get update && apt-get instyll -y systemd"
 
       - name: Install dependencies
-        run: apt-get update && apt-get install -y libnetfilter-queue1
+        run: sudo bash -c "apt-get install -y libnetfilter-queue1"
 
       - name: Install deb package
         run: yes | sudo dpkg -i ./portmaster_*.deb
 
       - name: Verify installation
-        run: ./hacks/test-install.sh
+        run: sudo ./hacks/test-install.sh
 
   test-rpm:
     name: Test RPM package
@@ -101,7 +101,7 @@ jobs:
           name: portmaster.rpm
 
       - name: Install tooling
-        run: yum install systemd
+        run: yum install -y systemd
 
       # we use yum localinstall instead of dnf install because
       # not all tested distro versions have dnf available and dnf
