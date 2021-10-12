@@ -4,7 +4,7 @@ log() {
   printf "\033[33;1mportmaster:\033[0m $@\n"
 }
 
-set -eu
+set -e
 
 log "Post-Remove: $@"
 
@@ -20,6 +20,7 @@ uninstall() {
 
 upgrade() {
   # we don't do anything on upgrade yet ...
+  true ;
 }
 
 action="$1"

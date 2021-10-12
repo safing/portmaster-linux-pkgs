@@ -58,8 +58,7 @@ jobs:
           - fedora:34
           - centos:7
           - centos:8
-          - opensuse/leap:15.1
-          - opensuse/leap:15.2
+          - opensuse/tumbleweed:latest
     container: ${{ matrix.container }}
     steps:
       - uses: actions/download-artifact@v2
