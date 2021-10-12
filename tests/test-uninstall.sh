@@ -37,3 +37,4 @@ else
 fi
 endgroup
 
+finish_tests

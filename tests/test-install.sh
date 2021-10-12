@@ -62,11 +62,5 @@ group "Modules"
     fi
 endgroup
 
-#
-# Abort with a non-zero exit code if we found at least one
-# error.
-#
-if [ "$error_count" -gt 0 ]; then
-    echo "::error::${error_count} errors encountered"
-    exit 1
-fi
+
+finish_tests
