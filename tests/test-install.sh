@@ -11,7 +11,7 @@ group "Systemd Integration"
     # the following tests only work if the system is booted using
     # systemd 
     #
-    if is_systemd_running then
+    if is_systemd_running ; then
         debug "Test if portmaster.service can be reached"
         if ! systemctl cat portmaster.service 2>/dev/null >&2 ; then
             error "portmaster.service not found"
