@@ -9,11 +9,8 @@ set -eu
 log "pre-remove:" "$@"
 
 use_systemctl="True"
-systemd_version=0
 if ! command -V systemctl >/dev/null 2>&1; then
   use_systemctl="False"
-else
-    systemd_version=$(systemctl --version | head -1 | sed -n 's/systemd \([0-9]*\).*/\1/p') 
 fi
 
 preremove() {
@@ -24,9 +21,40 @@ preremove() {
         fi
         if (systemctl -q is-enabled portmaster.service); then
             log "Disabling portmaster.service to launch at boot"
-            systemctl disable portmaster.service
+            systemctl disable portmaster.service ||:
         fi
     fi
 }
 
-preremove
+upgrade() {
+    true ; # There's nothing to do before an upgrade.
+}
+
+action="$1"
+if  [ "$1" = "remove" ] && [ -z "$2" ]; then
+  # Alpine linux does not pass args
+  # deb passes $1=remove
+  # rpm passes $1=0
+  action="uninstall"
+elif [ "$1" = "upgrade" ] && [ -n "$2" ]; then
+    # deb passes $1=upgrade $2=version
+    # rpm passes $1=1
+    action="upgrade"
+fi
+
+case "$action" in
+  "0" | "uninstall")
+    log "pre remove of complete uninstall"
+    preremove
+    ;;
+  "1" | "upgrade")
+    log "pre remove of upgrade"
+    upgrade
+    ;;
+  *)
+    # $1 == version being installed  
+    log "pre remove of alpine"
+    log "Alpine linux is not yet supported"
+    exit 1
+    ;;
+esac

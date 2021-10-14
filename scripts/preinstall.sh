@@ -19,3 +19,7 @@ checkConflicts() {
 }
 
 checkConflicts
+
+# Upgrade:
+#   deb: upgrade version-old version-new
+#   rpm: 2

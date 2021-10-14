@@ -9,13 +9,17 @@ set -e
 log "post-remove:" "$@"
 
 cleanup() {
-    rm -rf /opt/portmaster/updates
-    rm -rf /opt/portmaster
+    rm -rf /opt/portmaster/updates ||:
+    rm -rf /opt/portmaster ||:
     rm /lib/systemd/system/portmaster.service ||:
 }
 
 uninstall() {
   cleanup
+
+  if [ "$1" = "purge" ]; then
+    rm -rf /opt/portmaster ||:
+  fi
 }
 
 upgrade() {
@@ -24,20 +28,26 @@ upgrade() {
 }
 
 action="$1"
-if  [ "$1" = "configure" ] && [ -z "$2" ]; then
-  # Alpine linux does not pass args, and deb passes $1=configure
-  action="install"
-elif [ "$1" = "configure" ] && [ -n "$2" ]; then
-    # deb passes $1=configure $2=<current version>
+if  [ "$1" = "remove" ] && [ -z "$2" ]; then
+  # Alpine linux does not pass args
+  # deb passes $1=remove
+  # rpm passes $1=0
+  action="uninstall"
+elif [ "$1" = "purge" ] && [ -z "$2" ]; then
+    # deb passes $1=purge, Alpine and RPM does not have purge at all
+    action="purge"
+elif [ "$1" = "upgrade" ] && [ -n "$2" ]; then
+    # deb passes $1=upgrade $2=version
+    # rpm passes $1=1
     action="upgrade"
 fi
 
 case "$action" in
-  "1" | "install")
-    log "post remove of clean install"
-    uninstall
+  "0" | "uninstall" | "purge")
+    log "post remove of complete uninstall"
+    uninstall "$action"
     ;;
-  "2" | "upgrade")
+  "1" | "upgrade")
     log "post remove of upgrade"
     upgrade
     ;;
@@ -45,6 +55,7 @@ case "$action" in
     # $1 == version being installed  
     log "post remove of alpine"
     log "Alpine linux is not yet supported"
-    #exit 1
+    exit 1
     ;;
 esac
+

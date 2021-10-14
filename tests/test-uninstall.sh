@@ -17,23 +17,31 @@ endgroup
 # A normal uninstallation should keep user data
 # and logs in-place
 #
-group "Settings and logs are kept"
-if ! [ -d /opt/portmaster/databases ] ; then
-    error "Portmaster databases should have been left in tree"
-else
-    debug "Portmaster databases are left in tree as expected"
-fi
+#   group "Settings and logs are kept"
+#   if ! [ -d /opt/portmaster/databases ] ; then
+#       error "Portmaster databases should have been left in tree"
+#   else
+#       debug "Portmaster databases are left in tree as expected"
+#   fi
+#   
+#   if ! [ -e /opt/portmaster/config.json ]; then
+#       error "Portmaster global settings should have been left in tree"
+#   else
+#       debug "Portmaster global settings are left in tree as expected"
+#   fi
+#   
+#   if ! [ -d /opt/portmaster/logs ] ; then
+#       error "Portmaster logs should have been left in tree"
+#   else
+#       debug "Portmaster logs are left in tree as expected"
+#   fi
+#   endgroup
 
-if ! [ -e /opt/portmaster/config.json ]; then
-    error "Portmaster global settings should have been left in tree"
-else
-    debug "Portmaster global settings are left in tree as expected"
-fi
-
-if ! [ -d /opt/portmaster/logs ] ; then
-    error "Portmaster logs should have been left in tree"
-else
-    debug "Portmaster logs are left in tree as expected"
+group "Binaries are deleted"
+if [ -d /opt/portmaster/updates ]; then
+    error "Updates directory should have been removed"
+else 
+    debug "Updates directory has been removed as expected"
 fi
 endgroup
 
