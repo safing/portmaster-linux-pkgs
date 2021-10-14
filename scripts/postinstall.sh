@@ -81,9 +81,12 @@ installSystemdSupport() {
             systemctl daemon-reload ||:
         fi
 
-        # enable the portmaster service to launch at boot
-        log "Configuring portmaster.service to launch at boot"
-        systemctl enable portmaster.service ||:
+        if [ "$1" = "install" ]; then
+            # enable the portmaster service to launch at boot only on install
+            # do not overwrite the user decision to disable it.
+            log "Configuring portmaster.service to launch at boot"
+            systemctl enable portmaster.service ||:
+        fi
     fi
 }
 
