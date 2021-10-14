@@ -156,7 +156,7 @@ jobs:
           name: portmaster-current
 
       - name: Install tooling
-        run: yum install -y systemd desktop-file-utils
+        run: yum install -y systemd desktop-file-utils procps-ng
 
       # we use yum localinstall instead of dnf install because
       # not all tested distro versions have dnf available and those
