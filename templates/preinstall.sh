@@ -1,10 +1,6 @@
 #!/bin/bash
 
-log() {
-    printf "\033[33;1mportmaster:\033[0m %s\n" "$@"
-}
-
-set -e
+{{ file.Read "./common.sh"}}
 
 log "pre-install:" "$@"
 

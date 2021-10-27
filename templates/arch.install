@@ -1,0 +1,20 @@
+{{/* Template file expects repo root as working directory */}}
+pre_install() {
+    local dist="archlinux"
+{{ file.Read "./scripts/preinstall.sh" | strings.Indent 4 " " }}
+}
+
+post_install() {
+    local dist="archlinux"
+{{ file.Read "./scripts/postinstall.sh" | strings.Indent 4 " " }}
+}
+
+pre_remove() {
+    local dist="archlinux"
+{{ file.Read "./scripts/preremove.sh" | strings.Indent 4 " " }}
+}
+
+post_remove() {
+    local dist="archlinux"
+{{ file.Read "./scripts/postremove.sh" | strings.Indent 4 " " }}
+}

@@ -1,17 +1,18 @@
 #!/bin/bash
 
-log() {
-  printf "\033[33;1mportmaster:\033[0m %s\n" "$@"
-}
-
-set -e
+{{ file.Read "common.sh"}}
 
 log "post-remove:" "$@"
 
 cleanup() {
     rm -rf /opt/portmaster/updates ||:
     rm -rf /opt/portmaster ||:
-    rm /lib/systemd/system/portmaster.service ||:
+
+    # file is marked as a ghost on RPM system so it might have
+    # been automatically deleted by the package manager.
+    rm /lib/systemd/system/portmaster.service 2>/dev/null >&2 ||:
+    rm /usr/share/applications/portmaster.desktop 2>/dev/null >&2 ||:
+    rm /usr/share/applications/portmaster_notifier.desktop 2>/dev/null >&2 ||:
 }
 
 uninstall() {
