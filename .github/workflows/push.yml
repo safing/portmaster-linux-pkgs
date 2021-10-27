@@ -10,7 +10,7 @@ jobs:
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
         with:
-          ignore: ./templates
+          ignore: templates tests
 
   build:
     name: Build DEB/RPM
