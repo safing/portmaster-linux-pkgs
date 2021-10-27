@@ -56,4 +56,4 @@ gen-pkgbuild: nfpm.yaml
 	gomplate -d "nfpm=./nfpm.yaml" -f templates/PKGBUILD > PKGBUILD
 
 lint:
-	shellcheck
+	shellcheck ./scripts/* ./arch.install 

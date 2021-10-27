@@ -9,6 +9,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
+        with:
+          ignore: ./templates
 
   build:
     name: Build DEB/RPM
