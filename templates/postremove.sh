@@ -5,7 +5,7 @@
 log "post-remove:" "$@"
 
 uninstall() {
-    {{ file.Read "templates/snippets/post-remove.sh" | strings.Indent 4 " " }}
+{{ file.Read "templates/snippets/post-remove.sh" | strings.Indent 4 " " }}
 }
 
 action="$1"

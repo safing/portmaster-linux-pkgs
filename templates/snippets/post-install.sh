@@ -29,7 +29,7 @@ if [ "${skip_downloads}" = "True" ]; then
     return
 fi
 log "Downloading portmaster modules. This may take a while ..."
-/opt/portmaster/portmaster-start --data /opt/portmaster update --update-agent ${download_agent} 2>/dev/null >/dev/null || (
+/opt/portmaster/portmaster-start --data /opt/portmaster update --update-agent "${download_agent}" 2>/dev/null >/dev/null || (
     log "Failed to download modules"
     log "Please run '/opt/portmaster/portmaster-start --data /opt/portmaster update' manually.\n"
 )

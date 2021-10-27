@@ -6,7 +6,7 @@ log "pre-remove:" "$@"
 
 
 preremove() {
-    {{ file.Read "templates/snippets/pre-remove.sh" | strings.Indent 4 " " }}
+{{ file.Read "templates/snippets/pre-remove.sh" | strings.Indent 4 " " }}
 }
 
 action="$1"
