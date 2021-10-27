@@ -13,8 +13,8 @@ build: icons nfpm.yaml gen-scripts gen-pkgbuild
 
 icons:
 	for res in 16 32 48 96 128 ; do \
-		mkdir -p icons/$$res ; \
-		convert ./portmaster_logo.png -resize $${res}x$${res} icons/$${res}x$${res}}/portmaster.png ; \
+		mkdir -p icons/$${res}x$${res} ; \
+		convert ./portmaster_logo.png -resize "$${res}x$${res}" "icons/$${res}x$${res}/portmaster.png" ; \
 	done
 
 portmaster-start:
@@ -48,7 +48,7 @@ reset-pkgrev:
 gen-scripts: 
 	mkdir -p ./scripts
 	for file in "rules" "preinstall.sh" "postinstall.sh" "preremove.sh" "postremove.sh"; do \
-		gomplate -f "templates/${file}" > "./scripts/${file}"
+		gomplate -f "templates/$${file}" > "./scripts/$${file}" ; \
 	done;
 
 gen-pkgbuild: nfpm.yaml
