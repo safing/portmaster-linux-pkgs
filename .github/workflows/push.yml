@@ -17,8 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Install nfpm@latest
         run: curl -sfL https://install.goreleaser.com/github.com/goreleaser/nfpm.sh | sudo sh
+
+      - name: Install gomplate
+        run: sudo curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v3.10.0/gomplate_linux-amd64 && sudo chmod +x /usr/local/gomplate
+
       - name: Build packages
         run: make all
         env:
