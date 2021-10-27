@@ -15,7 +15,7 @@ installSystemdSupport "install"
 #
 # Fix selinux permissions for portmaster-start
 #
-if command -V chcon >/dev/null 2>&1; then
+if command -V getenforce >/dev/null 2>&1; then
     chcon -t bin_t /opt/portmaster/portmaster-start
 fi
 
