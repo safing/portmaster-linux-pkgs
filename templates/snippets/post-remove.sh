@@ -1,5 +1,4 @@
 rm -rf /opt/portmaster/updates ||:
-rm -rf /opt/portmaster ||:
 
 # file is marked as a ghost on RPM system so it might have
 # been automatically deleted by the package manager.
