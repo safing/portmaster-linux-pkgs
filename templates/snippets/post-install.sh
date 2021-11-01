@@ -20,6 +20,11 @@ if command -V getenforce >/dev/null 2>&1; then
 fi
 
 #
+# Prepare the installation directory tree
+#
+/opt/portmaster/portmaster-start --data /opt/portmaster clean-structure
+
+#
 # Finally, trigger downloading modules. As this requires internet access
 # it is more likely to fail and is thus the last thing we do.
 #
