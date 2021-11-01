@@ -7,6 +7,7 @@ section: "default"
 priority: "extra"
 maintainer: "Safing ICS Technologies <noc@safing.io>"
 description: |
+ Application Firewall: Block Mass Surveillance - Love Freedom
  The Portmaster enables you to protect your data on your device. You
  are back in charge of your outgoing connections: you choose what data
  you share and what data stays private. Read more on docs.safing.io.

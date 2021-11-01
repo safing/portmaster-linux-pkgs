@@ -10,7 +10,7 @@ elif [ -d /usr/share/applications ]; then
     cp /opt/portmaster/portmaster_notifier.desktop /usr/share/applications 2>/dev/null ||:
 fi
 
-installSystemdSupport "install"
+installSystemdSupport
 
 #
 # Fix selinux permissions for portmaster-start

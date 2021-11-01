@@ -21,5 +21,3 @@ if [ -d /var/lib/portmaster ]; then
     log "Removing previous installation directory at /var/lib/portmaster"
     rm -r /var/lib/portmaster 2>/dev/null >&2 ||:
 fi
-
-installSystemdSupport "upgrade"

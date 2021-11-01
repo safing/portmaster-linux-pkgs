@@ -15,6 +15,8 @@ cleanInstall() {
 
 upgrade() {
 {{ file.Read "templates/snippets/post-upgrade.sh" | strings.Indent 4 " " }}
+
+  cleanInstall
 }
 
 # Step 2, check if this is a clean install or an upgrade
