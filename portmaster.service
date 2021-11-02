@@ -5,6 +5,7 @@ Documentation=https://docs.safing.io
 Before=nss-lookup.target network.target shutdown.target
 After=systemd-networkd.service
 Conflicts=shutdown.target
+Conflicts=firewalld.service
 Wants=nss-lookup.target
 
 [Service]
@@ -37,7 +38,7 @@ CapabilityBoundingSet=cap_chown cap_kill cap_net_admin cap_net_bind_service cap_
 SystemCallArchitectures=native
 SystemCallFilter=@system-service @module
 SystemCallErrorNumber=EPERM
-ExecStart=/opt/safing/portmaster/portmaster-start --data /opt/safing/portmaster core -- --log $LOGLEVEL $PORTMASTER_ARGS
+ExecStart=/opt/safing/portmaster/portmaster-start --data /opt/safing/portmaster core -- $PORTMASTER_ARGS
 ExecStopPost=-/opt/safing/portmaster/portmaster-start recover-iptables
 
 [Install]
