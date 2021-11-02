@@ -17,30 +17,30 @@ license: "AGPL"
 #changelog: "changelog.yaml"
 contents:
 - src: portmaster-start
-  dst: /opt/portmaster/portmaster-start
+  dst: /opt/safing/portmaster/portmaster-start
   file_info:
     mode: 0755
 
 - src: portmaster.desktop
-  dst: /opt/portmaster/portmaster.desktop
+  dst: /opt/safing/portmaster/portmaster.desktop
 
-- src: /opt/portmaster/portmaster.desktop
+- src: /opt/safing/portmaster/portmaster.desktop
   dst: /usr/share/applications/portmaster.desktop
   type: ghost
 
 - src: portmaster_notifier.desktop
-  dst: /opt/portmaster/portmaster_notifier.desktop
+  dst: /opt/safing/portmaster/portmaster_notifier.desktop
 
 - src: portmaster_notifier.desktop
   dst: /usr/share/applications/portmaster_notifier.desktop
   type: ghost
 
-- src: /opt/portmaster/portmaster_notifier.desktop
+- src: /opt/safing/portmaster/portmaster_notifier.desktop
   dst: /etc/xdg/autostart/portmaster_notifier.desktop
   type: symlink
 
 - src: portmaster.service
-  dst: /opt/portmaster/portmaster.service
+  dst: /opt/safing/portmaster/portmaster.service
 - src: portmaster.service
   dst: /lib/systemd/system/portmaster.service
   type: ghost

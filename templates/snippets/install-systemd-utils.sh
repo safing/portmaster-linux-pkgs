@@ -10,17 +10,17 @@ installSystemdSupport() {
         # not all distros have migrated /lib to /usr/lib yet but all that
         # have provide a symlink from /lib -> /usr/lib so we just prefix with
         # /lib here.
-        ln -s /opt/portmaster/portmaster.service /lib/systemd/system/portmaster.service 2>/dev/null >&2 ||:
+        ln -s /opt/safing/portmaster/portmaster.service /lib/systemd/system/portmaster.service 2>/dev/null >&2 ||:
 
         # rhel/centos8 does not yet have ProtectKernelLogs available
         if [ "${systemd_version}" -lt 244 ]; then
-            sed -i "s/^ProtectKernelLogs/#ProtectKernelLogs/g" /opt/portmaster/portmaster.service ||:
+            sed -i "s/^ProtectKernelLogs/#ProtectKernelLogs/g" /opt/safing/portmaster/portmaster.service ||:
             changed="True"
         fi
 
         # SystemCallFilter groups are added in 231 so make sure we comment it out
         if [ "${systemd_version}" -lt 231 ]; then
-            sed -i "s/^SystemCall/#SystemCall/g" /opt/portmaster/portmaster.service ||:
+            sed -i "s/^SystemCall/#SystemCall/g" /opt/safing/portmaster/portmaster.service ||:
             changed="True"
         fi
 

@@ -18,19 +18,19 @@ endgroup
 # and logs in-place
 #
 #   group "Settings and logs are kept"
-#   if ! [ -d /opt/portmaster/databases ] ; then
+#   if ! [ -d /opt/safing/portmaster/databases ] ; then
 #       error "Portmaster databases should have been left in tree"
 #   else
 #       debug "Portmaster databases are left in tree as expected"
 #   fi
 #   
-#   if ! [ -e /opt/portmaster/config.json ]; then
+#   if ! [ -e /opt/safing/portmaster/config.json ]; then
 #       error "Portmaster global settings should have been left in tree"
 #   else
 #       debug "Portmaster global settings are left in tree as expected"
 #   fi
 #   
-#   if ! [ -d /opt/portmaster/logs ] ; then
+#   if ! [ -d /opt/safing/portmaster/logs ] ; then
 #       error "Portmaster logs should have been left in tree"
 #   else
 #       debug "Portmaster logs are left in tree as expected"
@@ -38,7 +38,7 @@ endgroup
 #   endgroup
 
 group "Binaries are deleted"
-if [ -d /opt/portmaster/updates ]; then
+if [ -d /opt/safing/portmaster/updates ]; then
     error "Updates directory should have been removed"
 else 
     debug "Updates directory has been removed as expected"

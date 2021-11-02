@@ -55,7 +55,7 @@ group "Desktop file"
 endgroup
 
 group "Modules"
-    if ! [ -e /opt/portmaster/updates/stable.json ]; then
+    if ! [ -e /opt/safing/portmaster/updates/stable.json ]; then
         error "Expected stable.json to have been downloaded"
     else
         debug "stable.json correctly downloaded from update server"
