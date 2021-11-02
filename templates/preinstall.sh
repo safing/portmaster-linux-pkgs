@@ -2,8 +2,6 @@
 
 {{ file.Read "templates/snippets/common.sh"}}
 
-log "pre-install:" "$@"
-
 if [ -d /var/lib/portmaster/updates ]; then
     log "Detected previous installation of Portmaster at"
     log "/var/lib/portmaster"

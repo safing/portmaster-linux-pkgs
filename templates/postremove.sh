@@ -2,8 +2,6 @@
 
 {{ file.Read "templates/snippets/common.sh"}}
 
-log "post-remove:" "$@"
-
 uninstall() {
 {{ file.Read "templates/snippets/post-remove.sh" | strings.Indent 4 " " }}
 }

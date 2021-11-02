@@ -2,8 +2,6 @@
 
 {{ file.Read "templates/snippets/common.sh"}}
 
-log "post-install:" "$@"
-
 download_agent="${PMSTART_UPDATE_AGENT:=Start}"
 skip_downloads="${PMSTART_SKIP_DOWNLOAD:=False}"
 

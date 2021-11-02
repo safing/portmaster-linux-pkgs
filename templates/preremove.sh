@@ -2,9 +2,6 @@
 
 {{ file.Read "templates/snippets/common.sh" }}
 
-log "pre-remove:" "$@"
-
-
 preremove() {
 {{ file.Read "templates/snippets/pre-remove.sh" | strings.Indent 4 " " }}
 }
@@ -23,15 +20,14 @@ fi
 
 case "$action" in
     "0" | "uninstall")
-      log "pre remove of complete uninstall"
       preremove
       ;;
     "1" | "upgrade")
-      log "pre remove of upgrade"
+      # this is pre-remove of an upgrade
+      true; 
       ;;
     *)
       # $1 == version being installed  
-      log "pre remove of alpine"
       log "Alpine linux is not yet supported"
       exit 1
       ;;
